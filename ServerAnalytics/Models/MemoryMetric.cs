@@ -12,5 +12,7 @@ namespace ServerAnalytics.Models
         public double Used { get; set; }
         [Required]
         public double? Free { get; set; }
+
+        public DateTimeOffset DateCheck { get; set; }
     }
 }
