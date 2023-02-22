@@ -10,16 +10,27 @@ namespace ServerAnalytics.Controllers
     public class MetricsController : Controller
     {
         IMemoryMetricsService memoryMetricsService;
-        public MetricsController(IMemoryMetricsService memoryMetricsService) 
+        IRunningProcessesService runningProcessesService;
+        
+        public MetricsController(IMemoryMetricsService memoryMetricsService, IRunningProcessesService runningProcessesService) 
         {
             this.memoryMetricsService = memoryMetricsService;
+            this.runningProcessesService = runningProcessesService;
         }
-        [HttpGet("")]
+        [HttpGet("/afdadfas")]
         public async Task<ActionResult<MemoryMetric>> GetMemory() 
         {
             var metric = memoryMetricsService.GetMemoryMetric();
 
             return new JsonResult(metric);
+        }
+
+        [HttpGet("")]
+        public async Task<ActionResult<IEnumerable<RunningProcess>>> GetRunningProcesses()
+        {
+            var ds = runningProcessesService.RunningOnWindows();
+            //runningProcessesService.RunningOnWindows();
+            return new JsonResult(ds);
         }
     }
 }

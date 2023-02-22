@@ -69,7 +69,7 @@ namespace ServerAnalytics.Services
             metrics.Total = double.Parse(memory[1]);
             metrics.Used = double.Parse(memory[2]);
             metrics.Free = double.Parse(memory[3]);
-
+            metrics.DateCheck = DateTimeOffset.Now;
             return metrics;
         }
     }

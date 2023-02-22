@@ -10,11 +10,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddScoped<IMemoryMetricsService, MemoryMetricsService>();
 builder.Services.AddScoped<IRuntimeInformation, RuntimeInformationService>();
+builder.Services.AddScoped<IRunningProcessesService, RunningProcessService>();
 
 builder.Services.AddSwaggerGen(p =>
 {
     p.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-    p.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
+    //p.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
 
 });
 
