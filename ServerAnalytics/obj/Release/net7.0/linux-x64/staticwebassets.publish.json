@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "qhk8b4QnnLNdsMsWjtN0skdyyiN91VN/wRRbvXp7vB8=",
+  "Source": "ServerAnalytics",
+  "BasePath": "_content/ServerAnalytics",
+  "Mode": "Default",
+  "ManifestType": "Publish",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
