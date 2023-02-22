@@ -28,7 +28,7 @@ namespace ServerAnalytics.Controllers
         [HttpGet("")]
         public async Task<ActionResult<IEnumerable<RunningProcess>>> GetRunningProcesses()
         {
-            var ds = runningProcessesService.RunningOnWindowsCMD();
+            var ds = runningProcessesService.RunningOnWindows();
             //runningProcessesService.RunningOnWindows();
             return new JsonResult(ds);
         }

@@ -52,29 +52,6 @@ namespace ServerAnalytics.Services
                 runningProcess.DateChek = DateTimeOffset.Now;
                 records.Add(runningProcess);
             }
-
-            //using (var process = Process.Start(info))
-            //{
-            //    output = process.StandardOutput.ReadToEnd();
-            //}
-
-            //var lines = output.Trim().Split('\n', StringSplitOptions.RemoveEmptyEntries);
-
-            //for (int i = 2; i < lines.Length; i++)
-            //{
-            //    runningProcess = new RunningProcess();
-            //    var allline = lines[i].Split("  ", StringSplitOptions.RemoveEmptyEntries);
-            //    var pidNameSe = allline[1].Split(" ", StringSplitOptions.RemoveEmptyEntries);
-
-            //    runningProcess.Name = allline[0];
-            //    runningProcess.PID = Convert.ToInt32(pidNameSe[0]);
-            //    runningProcess.NameSession = pidNameSe[1];
-            //    runningProcess.SessionNumber = Convert.ToInt32(allline[2]);
-            //    runningProcess.Memory = allline[3];
-            //    runningProcess.DateChek = DateTimeOffset.Now;
-
-            //    records.Add(runningProcess);
-            //}
             return records;
         }
 
