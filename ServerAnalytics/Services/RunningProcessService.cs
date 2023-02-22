@@ -30,8 +30,10 @@ namespace ServerAnalytics.Services
             info.FileName = "cmd.exe";
             info.Arguments = $"/c chcp 65001 & tasklist /NH";
             info.RedirectStandardOutput = true;
+            info.UseShellExecute = false;
             //info.StandardInputEncoding = System.Text.Encoding.UTF8;
             info.StandardOutputEncoding = System.Text.Encoding.UTF8;
+            Console.InputEncoding = System.Text.Encoding.UTF8;
 
             List<RunningProcess> records = new List<RunningProcess>();
             RunningProcess runningProcess;
