@@ -4,11 +4,11 @@ namespace ServerAnalytics.Services
 {
     public class ProcessorMetricsService
     {
-        private async Task<double> GetCpuUsageForProcess()
+        private double GetCpuUsageForProcess()
         {
             var startTime = DateTime.UtcNow;
             var startCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
-            await Task.Delay(500);
+            //await Task.Delay(500);
 
             var endTime = DateTime.UtcNow;
             var endCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;

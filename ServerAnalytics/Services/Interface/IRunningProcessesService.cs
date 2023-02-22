@@ -6,5 +6,6 @@ namespace ServerAnalytics.Services.Interface
     {
         //RunningProcess GetRunnningProcesses();
         List<RunningProcess> RunningOnWindows();
+        List<RunningProcess> RunningOnWindowsCMD();
     }
 }
