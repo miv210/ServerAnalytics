@@ -1,6 +1,4 @@
-﻿using CsvHelper.Configuration;
-using CsvHelper;
-using ServerAnalytics.Models;
+﻿using ServerAnalytics.Models;
 using ServerAnalytics.Services.Interface;
 using System.Diagnostics;
 using System.Globalization;
@@ -11,30 +9,8 @@ namespace ServerAnalytics.Services
 {
     public class RunningProcessService : IRunningProcessesService
     {
-        IRuntimeInformation runtimeInformation;
-        public RunningProcessService(IRuntimeInformation runtimeInformation) 
-        { 
-            this.runtimeInformation = runtimeInformation;
-        }
-
-        //public RunningProcess GetRunnningProcesses()
-        //{
-
-        //}
-
-        public List<RunningProcess> RunningOnWindows ()
+        public List<RunningProcess> GetRunningProcesses ()
         {
-
-            var output = "";
-            var info = new ProcessStartInfo();
-            info.FileName = "cmd.exe";
-            info.Arguments = $"/c chcp 65001 & tasklist /NH";
-            info.RedirectStandardOutput = true;
-            info.UseShellExecute = false;
-            
-            info.StandardOutputEncoding = System.Text.Encoding.UTF8;
-            Process.Start(info);
-
             List<RunningProcess> records = new List<RunningProcess>();
             RunningProcess runningProcess;
 

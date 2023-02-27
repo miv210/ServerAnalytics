@@ -26,7 +26,7 @@ namespace ServerAnalytics.Controllers
         }
 
         [HttpGet("")]
-        public async Task<ActionResult<IEnumerable<RunningProcess>>> GetRunningProcesses()
+        public async Task<ActionResult<List<RunningProcess>>> GetRunningProcesses()
         {
             var ds = runningProcessesService.RunningOnWindows();
             //runningProcessesService.RunningOnWindows();
