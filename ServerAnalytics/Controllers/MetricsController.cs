@@ -2,6 +2,7 @@
 using ServerAnalytics.Models;
 using ServerAnalytics.Services;
 using ServerAnalytics.Services.Interface;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace ServerAnalytics.Controllers
 {
@@ -11,13 +12,32 @@ namespace ServerAnalytics.Controllers
     {
         IMemoryMetricsService memoryMetricsService;
         IRunningProcessesService runningProcessesService;
-        
-        public MetricsController(IMemoryMetricsService memoryMetricsService, IRunningProcessesService runningProcessesService) 
+        IProcessorMetricsService processorMetricsService;
+        IAuthService authService;
+
+        public MetricsController(
+            IMemoryMetricsService memoryMetricsService, 
+            IRunningProcessesService runningProcessesService, 
+            IProcessorMetricsService processorMetricsService,
+            IAuthService authService
+            
+            ) 
         {
+            this.authService= authService;
             this.memoryMetricsService = memoryMetricsService;
             this.runningProcessesService = runningProcessesService;
+            this.processorMetricsService = processorMetricsService;
         }
-        [HttpGet("/afdadfas")]
+
+        [HttpGet("login/{user}")]
+        public async Task<ActionResult> GenerationJWT(User user)
+        {
+
+            var jwt = authService.GenerationJWT(user);
+            return jwt;
+        }
+
+        [HttpGet("memory")]
         public async Task<ActionResult<MemoryMetric>> GetMemory() 
         {
             var metric = memoryMetricsService.GetMemoryMetric();
@@ -25,12 +45,18 @@ namespace ServerAnalytics.Controllers
             return new JsonResult(metric);
         }
 
-        [HttpGet("")]
+        [HttpGet("runninProcesses")]
         public async Task<ActionResult<List<RunningProcess>>> GetRunningProcesses()
         {
-            var ds = runningProcessesService.RunningOnWindows();
-            //runningProcessesService.RunningOnWindows();
-            return new JsonResult(ds);
+            var metric = runningProcessesService.GetRunningProcesses();
+            return new JsonResult(metric);
+        }
+
+        [HttpGet("processor")]
+        public async Task<ActionResult<Task<WorkLodaProcessor>>> GetMetricsProcessor()
+        {
+            var metric = processorMetricsService.GetCpuUsageForProcessAsync();
+            return new JsonResult(metric);
         }
     }
 }
