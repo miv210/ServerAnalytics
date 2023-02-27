@@ -13,6 +13,6 @@ namespace ServerAnalytics.Models
         [Required]
         public double? Free { get; set; }
 
-        public DateTimeOffset DateCheck { get; set; }
+        public DateTime DateCheck { get; set; }
     }
 }

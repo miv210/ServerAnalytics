@@ -12,13 +12,9 @@ namespace ServerAnalytics.Services.AuthService
     public class AuthService : IAuthService
     {
         JwtResponse jwtResponse = new JwtResponse();
-        User user1= new User();
-        
         public JsonResult GenerationJWT(User person)
         {
-            user1.Login = "admin";
-            user1.Password = "admin";
-            user1.Role = "admin";
+         
 
             User user;
             using(ServerAnalyticsContext db = new ServerAnalyticsContext())

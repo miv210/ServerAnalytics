@@ -6,12 +6,13 @@ namespace ServerAnalytics.Services
 {
     public class MemoryMetricsService : IMemoryMetricsService
     {
+        public ServerAnalyticsContext db;
         public IRuntimeInformation runtimeInformation { get; set; }
         public MemoryMetricsService(IRuntimeInformation runtimeInformation)
         {
             this.runtimeInformation = runtimeInformation;
         }
-        public MemoryMetric GetMemoryMetric()
+        public List<MemoryMetric> GetMemoryMetric()
         {
             if (runtimeInformation.IsUnix())
             {
@@ -20,7 +21,7 @@ namespace ServerAnalytics.Services
             return GetWindowsMetrics();
         }
 
-        private MemoryMetric GetWindowsMetrics()
+        private List<MemoryMetric> GetWindowsMetrics()
         {
             var output = "";
 
@@ -42,12 +43,22 @@ namespace ServerAnalytics.Services
             metrics.Total = Math.Round(double.Parse(totalMemoryParts[1]) / 1024, 0);
             metrics.Free = Math.Round(double.Parse(freeMemoryParts[1]) / 1024, 0);
             metrics.Used = (double)(metrics.Total - metrics.Free);
-            metrics.DateCheck = DateTimeOffset.Now;
+            metrics.DateCheck = DateTime.UtcNow;
+            List<MemoryMetric> memoryMetrics = new List<MemoryMetric>();
 
-            return metrics;
+            using(db = new ServerAnalyticsContext())
+            {
+                db.MemoryMetrics.Add(metrics);
+                db.SaveChanges();
+            }
+            using (db = new ServerAnalyticsContext())
+            {
+                memoryMetrics = db.MemoryMetrics.ToList();
+            }
+            return memoryMetrics;
         }
 
-        private MemoryMetric GetUnixMetrics()
+        private List<MemoryMetric> GetUnixMetrics()
         {
             var output = "";
 
@@ -69,8 +80,20 @@ namespace ServerAnalytics.Services
             metrics.Total = double.Parse(memory[1]);
             metrics.Used = double.Parse(memory[2]);
             metrics.Free = double.Parse(memory[3]);
-            metrics.DateCheck = DateTimeOffset.Now;
-            return metrics;
+            metrics.DateCheck = DateTime.UtcNow;
+
+            List<MemoryMetric> memoryMetrics = new List<MemoryMetric>();
+
+            using (db = new ServerAnalyticsContext())
+            {
+                db.MemoryMetrics.Add(metrics);
+                db.SaveChanges();
+            }
+            using (db = new ServerAnalyticsContext())
+            {
+                memoryMetrics = db.MemoryMetrics.ToList();
+            }
+            return memoryMetrics;
         }
     }
 }

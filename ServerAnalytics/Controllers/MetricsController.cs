@@ -29,7 +29,7 @@ namespace ServerAnalytics.Controllers
             this.processorMetricsService = processorMetricsService;
         }
 
-        [HttpGet("login/{user}")]
+        [HttpPost("login/{user}")]
         public async Task<ActionResult> GenerationJWT(User user)
         {
 
@@ -38,7 +38,7 @@ namespace ServerAnalytics.Controllers
         }
 
         [HttpGet("memory")]
-        public async Task<ActionResult<MemoryMetric>> GetMemory() 
+        public async Task<ActionResult<List<MemoryMetric>>> GetMemory() 
         {
             var metric = memoryMetricsService.GetMemoryMetric();
 

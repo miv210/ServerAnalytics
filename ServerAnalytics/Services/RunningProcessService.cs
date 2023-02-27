@@ -9,6 +9,7 @@ namespace ServerAnalytics.Services
 {
     public class RunningProcessService : IRunningProcessesService
     {
+        ServerAnalyticsContext db;
         public List<RunningProcess> GetRunningProcesses ()
         {
             List<RunningProcess> records = new List<RunningProcess>();
@@ -19,14 +20,30 @@ namespace ServerAnalytics.Services
             
             foreach ( Process process in processesList )
             {
-                runningProcess = new RunningProcess();
+                runningProcess = new RunningProcess
+                {
+                    
+                    Name = process.ProcessName,
+                    PID = process.Id,
+                    SessionNumber = process.SessionId,
+                    Memory = $"{process.WorkingSet / 1024} K",
+                    DateChek = DateTime.UtcNow
+                };
+                //runningProcess = new RunningProcess();
 
-                runningProcess.Name = process.ProcessName;
-                runningProcess.PID = process.Id;
-                runningProcess.SessionNumber = process.SessionId;
-                runningProcess.Memory = $"{process.WorkingSet /1024} K";
-                runningProcess.DateChek = DateTimeOffset.Now;
-                records.Add(runningProcess);
+                //runningProcess.Name = process.ProcessName;
+                //runningProcess.PID = process.Id;
+                //runningProcess.SessionNumber = process.SessionId;
+                //runningProcess.Memory = $"{process.WorkingSet /1024} K";
+                //runningProcess.DateChek = DateTime.UtcNow;
+
+                records.Add( runningProcess );
+            }
+            using (db = new ServerAnalyticsContext())
+            {
+                db.RunningProcesses.AddRange( records );
+                db.SaveChanges();
+                records = db.RunningProcesses.ToList();
             }
             return records;
         }
@@ -54,19 +71,30 @@ namespace ServerAnalytics.Services
 
             for (int i = 2; i < lines.Length; i++)
             {
-                runningProcess = new RunningProcess();
                 var allline = lines[i].Split("  ", StringSplitOptions.RemoveEmptyEntries);
                 var pidNameSe = allline[1].Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
-                runningProcess.Name = allline[0];
-                runningProcess.PID = Convert.ToInt32(pidNameSe[0]);
-                runningProcess.NameSession = pidNameSe[1];
-                runningProcess.SessionNumber = Convert.ToInt32(allline[2]);
-                runningProcess.Memory = allline[3];
-                runningProcess.DateChek = DateTimeOffset.Now;
+                runningProcess = new RunningProcess
+                {
+                    Name = allline[0],
+                    PID = Convert.ToInt32(pidNameSe[0]),
+                    NameSession = pidNameSe[1],
+                    SessionNumber = Convert.ToInt32(allline[2]),
+                    Memory = allline[3],
+                    DateChek = DateTime.UtcNow,
+                };
+                //using()
+                //runningProcess.Name = allline[0];
+                //runningProcess.PID = Convert.ToInt32(pidNameSe[0]);
+                //runningProcess.NameSession = pidNameSe[1];
+                //runningProcess.SessionNumber = Convert.ToInt32(allline[2]);
+                //runningProcess.Memory = allline[3];
+                //runningProcess.DateChek = DateTime.UtcNow;
 
                 records.Add(runningProcess);
             }
+
+
             return records;
         }
     }

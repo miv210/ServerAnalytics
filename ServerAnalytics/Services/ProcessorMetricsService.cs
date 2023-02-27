@@ -21,7 +21,7 @@ namespace ServerAnalytics.Services
             var cpuUsageTotal = cpuUsedMs / (Environment.ProcessorCount * totalMsPassed);
 
             processor.WorkLoda = cpuUsageTotal * 100;
-            processor.DateCheck = DateTimeOffset.Now;
+            processor.DateCheck = DateTime.UtcNow;
 
             return  processor;
         }

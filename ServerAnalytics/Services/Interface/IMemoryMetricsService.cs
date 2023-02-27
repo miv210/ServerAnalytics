@@ -4,6 +4,6 @@ namespace ServerAnalytics.Services.Interface
 {
     public interface IMemoryMetricsService
     {
-        public MemoryMetric GetMemoryMetric();
+        public List<MemoryMetric> GetMemoryMetric();
     }
 }
