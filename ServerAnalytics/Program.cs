@@ -40,11 +40,14 @@ builder.Services.AddScoped<IRunningProcessesService, RunningProcessService>();
 builder.Services.AddScoped<IProcessorMetricsService, ProcessorMetricsService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+builder.Services.AddCors();
+
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
+app.UseCors(builder => builder.AllowAnyOrigin());
 
 app.UseAuthorization();
 

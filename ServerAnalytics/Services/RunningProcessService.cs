@@ -26,17 +26,9 @@ namespace ServerAnalytics.Services
                     Name = process.ProcessName,
                     PID = process.Id,
                     SessionNumber = process.SessionId,
-                    Memory = $"{process.WorkingSet / 1024} K",
-                    DateChek = DateTime.UtcNow
+                    Memory = process.WorkingSet / 1024,
+                    DateCheck = DateTime.UtcNow
                 };
-                //runningProcess = new RunningProcess();
-
-                //runningProcess.Name = process.ProcessName;
-                //runningProcess.PID = process.Id;
-                //runningProcess.SessionNumber = process.SessionId;
-                //runningProcess.Memory = $"{process.WorkingSet /1024} K";
-                //runningProcess.DateChek = DateTime.UtcNow;
-
                 records.Add( runningProcess );
             }
             using (db = new ServerAnalyticsContext())
@@ -73,6 +65,7 @@ namespace ServerAnalytics.Services
             {
                 var allline = lines[i].Split("  ", StringSplitOptions.RemoveEmptyEntries);
                 var pidNameSe = allline[1].Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                var memory = allline[3].Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
                 runningProcess = new RunningProcess
                 {
@@ -80,8 +73,8 @@ namespace ServerAnalytics.Services
                     PID = Convert.ToInt32(pidNameSe[0]),
                     NameSession = pidNameSe[1],
                     SessionNumber = Convert.ToInt32(allline[2]),
-                    Memory = allline[3],
-                    DateChek = DateTime.UtcNow,
+                    Memory = Convert.ToInt32(memory[0]),
+                    DateCheck = DateTime.UtcNow,
                 };
                 //using()
                 //runningProcess.Name = allline[0];

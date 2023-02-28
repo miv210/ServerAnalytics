@@ -15,7 +15,7 @@ namespace ServerAnalytics.Models
         
         public int SessionNumber { get; set; }
         
-        public string Memory { get; set; }
-        public DateTime DateChek { get; set; }
+        public int Memory { get; set; }
+        public DateTime DateCheck { get; set; }
     }
 }
