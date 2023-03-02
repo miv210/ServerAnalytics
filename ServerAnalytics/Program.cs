@@ -5,6 +5,9 @@ using ServerAnalytics.Services;
 using ServerAnalytics.Services.Interface;
 using System.Reflection;
 using ServerAnalytics.Services.AuthService;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Security.Cryptography.Xml;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,8 +35,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 // Add services to the container.
-
 builder.Services.AddControllers();
+
+
 builder.Services.AddScoped<IMemoryMetricsService, MemoryMetricsService>();
 builder.Services.AddScoped<IRuntimeInformation, RuntimeInformationService>();
 builder.Services.AddScoped<IRunningProcessesService, RunningProcessService>();

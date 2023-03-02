@@ -4,40 +4,68 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Collections.Immutable;
+using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace ServerAnalytics.Services
 {
     public class RunningProcessService : IRunningProcessesService
     {
         ServerAnalyticsContext db;
-        public List<RunningProcess> GetRunningProcesses ()
+        public void UpdateRunningProcesses ()
         {
-            List<RunningProcess> records = new List<RunningProcess>();
             RunningProcess runningProcess;
-
+            DateTime date = DateTime.UtcNow;
             Process[] processesList = Process.GetProcesses();
             
-            
-            foreach ( Process process in processesList )
+            var runningProcesses = processesList.Select(p=> new RunningProcess
             {
-                runningProcess = new RunningProcess
-                {
-                    
-                    Name = process.ProcessName,
-                    PID = process.Id,
-                    SessionNumber = process.SessionId,
-                    Memory = process.WorkingSet / 1024,
-                    DateCheck = DateTime.UtcNow
-                };
-                records.Add( runningProcess );
-            }
+                Name = p.ProcessName,
+                PID = p.Id,
+                SessionNumber = p.SessionId,
+                Memory = p.WorkingSet / 1024,
+                DateCheck = date
+            }).ToList();
+
             using (db = new ServerAnalyticsContext())
             {
-                db.RunningProcesses.AddRange( records );
+                db.RunningProcesses.AddRange(runningProcesses);
                 db.SaveChanges();
-                records = db.RunningProcesses.ToList();
             }
-            return records;
+            //var parent = processesList.GroupBy(p => p.ProcessName).Select(p => new RunningProcess
+            //{
+            //    Name = p.Key,
+            //    Memory = p.Sum(d => d.WorkingSet / 1024),
+            //    DateCheck = date,
+            //    Children = p.Select(d => new RunningProcess
+            //    {
+            //        Name = d.ProcessName,
+            //        PID = d.Id,
+            //        SessionNumber = d.SessionId,
+            //        Memory = d.WorkingSet / 1024,
+            //        DateCheck = date
+            //    }).ToList(),
+            //});
+        }
+
+        public List<RunningProcess> GetRunningProcesses()
+        {
+            List<RunningProcess> runningProcesses = new List<RunningProcess>();
+
+            using(db = new ServerAnalyticsContext())
+            {
+                runningProcesses = db.RunningProcesses.ToList();
+            }
+
+            var withChildren = runningProcesses.GroupBy(p => new { p.Name, p.DateCheck, p.Children } ).Select(p => new RunningProcess
+            {
+                Name = p.Key.Name,
+                Memory = p.Sum(d => d.Memory / 1024),
+                DateCheck = p.Key.DateCheck,
+                Children = runningProcesses.Where(d=> d.Name == p.Key.Name ).ToList(),
+            }).ToList();
+
+            return withChildren;
         }
 
         public List<RunningProcess> RunningOnWindowsCMD()

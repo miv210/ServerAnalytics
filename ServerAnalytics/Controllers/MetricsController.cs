@@ -29,12 +29,20 @@ namespace ServerAnalytics.Controllers
             this.processorMetricsService = processorMetricsService;
         }
 
+
         [HttpPost("login/{user}")]
         public async Task<ActionResult> GenerationJWT(User user)
         {
 
             var jwt = authService.GenerationJWT(user);
             return jwt;
+        }
+
+        [HttpGet("updateMetrics")]
+        public async Task<ActionResult> UpdateMetrics()
+        {
+            runningProcessesService.UpdateRunningProcesses();
+            return new OkResult();
         }
 
         [HttpGet("memory")]

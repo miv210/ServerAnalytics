@@ -8,8 +8,8 @@ namespace ServerAnalytics.Models
 
         public ServerAnalyticsContext()
         {
-            Database.EnsureDeleted();
-            Database.EnsureCreated();
+            //Database.EnsureDeleted();
+            //Database.EnsureCreated();
         }
         public ServerAnalyticsContext(DbContextOptions<ServerAnalyticsContext> options)
         : base(options)

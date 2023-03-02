@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "f3R77YBdZKuW7RRBmQ0VrxT9EuhWHRCfEUErOfPsHTc+H6HI01u4smEYCQntloF7AkJgNO7wR/FMHiY3aWLEng==",
+  "dgSpecHash": "xCko0so8OINf5U790rUr74Y4XhwU8zbvZP6f71AiV+jcSkTuLma0RiUu1d7avI9NC7ojqQwNBJULckysP/A9rA==",
   "success": true,
   "projectFilePath": "C:\\VsProjects\\ServerAnalytics\\ServerAnalytics\\ServerAnalytics.csproj",
   "expectedPackageFiles": [
@@ -29,6 +29,7 @@
     "C:\\Users\\RxGroup\\.nuget\\packages\\microsoft.identitymodel.protocols.openidconnect\\6.15.1\\microsoft.identitymodel.protocols.openidconnect.6.15.1.nupkg.sha512",
     "C:\\Users\\RxGroup\\.nuget\\packages\\microsoft.identitymodel.tokens\\6.15.1\\microsoft.identitymodel.tokens.6.15.1.nupkg.sha512",
     "C:\\Users\\RxGroup\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
+    "C:\\Users\\RxGroup\\.nuget\\packages\\newtonsoft.json\\13.0.2\\newtonsoft.json.13.0.2.nupkg.sha512",
     "C:\\Users\\RxGroup\\.nuget\\packages\\npgsql\\7.0.2\\npgsql.7.0.2.nupkg.sha512",
     "C:\\Users\\RxGroup\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\7.0.3\\npgsql.entityframeworkcore.postgresql.7.0.3.nupkg.sha512",
     "C:\\Users\\RxGroup\\.nuget\\packages\\system.codedom\\4.4.0\\system.codedom.4.4.0.nupkg.sha512",
