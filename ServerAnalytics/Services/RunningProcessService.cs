@@ -12,11 +12,11 @@ namespace ServerAnalytics.Services
     public class RunningProcessService : IRunningProcessesService
     {
         ServerAnalyticsContext db;
-        public void UpdateRunningProcesses ()
+        public void UpdateRunningProcesses (string nameMachine)
         {
-            RunningProcess runningProcess;
+            
             DateTime date = DateTime.UtcNow;
-            Process[] processesList = Process.GetProcesses();
+            Process[] processesList = Process.GetProcesses(nameMachine);
             
             var runningProcesses = processesList.Select(p=> new RunningProcess
             {
@@ -32,20 +32,6 @@ namespace ServerAnalytics.Services
                 db.RunningProcesses.AddRange(runningProcesses);
                 db.SaveChanges();
             }
-            //var parent = processesList.GroupBy(p => p.ProcessName).Select(p => new RunningProcess
-            //{
-            //    Name = p.Key,
-            //    Memory = p.Sum(d => d.WorkingSet / 1024),
-            //    DateCheck = date,
-            //    Children = p.Select(d => new RunningProcess
-            //    {
-            //        Name = d.ProcessName,
-            //        PID = d.Id,
-            //        SessionNumber = d.SessionId,
-            //        Memory = d.WorkingSet / 1024,
-            //        DateCheck = date
-            //    }).ToList(),
-            //});
         }
 
         public List<RunningProcess> GetRunningProcesses()
@@ -57,12 +43,12 @@ namespace ServerAnalytics.Services
                 runningProcesses = db.RunningProcesses.ToList();
             }
 
-            var withChildren = runningProcesses.GroupBy(p => new { p.Name, p.DateCheck, p.Children } ).Select(p => new RunningProcess
+            var withChildren = runningProcesses.GroupBy(p => new { p.Name, p.DateCheck} ).Select(p => new RunningProcess
             {
                 Name = p.Key.Name,
                 Memory = p.Sum(d => d.Memory / 1024),
                 DateCheck = p.Key.DateCheck,
-                Children = runningProcesses.Where(d=> d.Name == p.Key.Name ).ToList(),
+                Children = p.ToList(),
             }).ToList();
 
             return withChildren;
