@@ -14,5 +14,7 @@ namespace ServerAnalytics.Models
         public double? Free { get; set; }
 
         public DateTime DateCheck { get; set; }
+        public int IdServer { get; set; }
+        public Server Server { get; set; }
     }
 }

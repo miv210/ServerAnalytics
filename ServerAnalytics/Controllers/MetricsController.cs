@@ -42,6 +42,7 @@ namespace ServerAnalytics.Controllers
         public async Task<ActionResult> UpdateMetrics()
         {
             runningProcessesService.UpdateRunningProcesses();
+            //await processorMetricsService.UpdateCpuMetrics(serv);
             return new OkResult();
         }
 
@@ -63,7 +64,7 @@ namespace ServerAnalytics.Controllers
         [HttpGet("processor")]
         public async Task<ActionResult<Task<WorkLodaProcessor>>> GetMetricsProcessor()
         {
-            var metric = processorMetricsService.GetCpuUsageForProcessAsync();
+            var metric = processorMetricsService.GetCpuMetrics();
             return new JsonResult(metric);
         }
     }

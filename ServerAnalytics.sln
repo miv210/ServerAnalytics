@@ -5,6 +5,8 @@ VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerAnalytics", "ServerAnalytics\ServerAnalytics.csproj", "{896BF38D-AA13-4A15-A2CA-51E2A5A6500C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerAnalyticsApp", "ServerAnalyticsApp\ServerAnalyticsApp.csproj", "{2168A5FD-9CCA-4BD5-A293-61092865E903}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{896BF38D-AA13-4A15-A2CA-51E2A5A6500C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{896BF38D-AA13-4A15-A2CA-51E2A5A6500C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{896BF38D-AA13-4A15-A2CA-51E2A5A6500C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2168A5FD-9CCA-4BD5-A293-61092865E903}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2168A5FD-9CCA-4BD5-A293-61092865E903}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2168A5FD-9CCA-4BD5-A293-61092865E903}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2168A5FD-9CCA-4BD5-A293-61092865E903}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

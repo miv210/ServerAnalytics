@@ -6,24 +6,51 @@ namespace ServerAnalytics.Services
 {
     public class  ProcessorMetricsService : IProcessorMetricsService
     {
-        public async Task<WorkLodaProcessor> GetCpuUsageForProcessAsync()
+        ServerAnalyticsContext db;
+
+        public List<WorkLodaProcessor> GetCpuMetrics()
         {
-            WorkLodaProcessor processor = new WorkLodaProcessor();
+            List<WorkLodaProcessor> workLodaProcessors= new List<WorkLodaProcessor>();
 
-            var startTime = DateTime.UtcNow;
-            var startCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
-            await Task.Delay(500);
+            using (db = new ServerAnalyticsContext())
+            {
+                workLodaProcessors = db.WorkLodaProcessors.ToList();
+            }
+            return workLodaProcessors;
+        }
 
-            var endTime = DateTime.UtcNow;
-            var endCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
-            var cpuUsedMs = (endCpuUsage - startCpuUsage).TotalMilliseconds;
-            var totalMsPassed = (endTime - startTime).TotalMilliseconds;
-            var cpuUsageTotal = cpuUsedMs / (Environment.ProcessorCount * totalMsPassed);
+        public async Task UpdateCpuMetrics()
+        {
+            WorkLodaProcessor processor;
 
-            processor.WorkLoda = cpuUsageTotal * 100;
-            processor.DateCheck = DateTime.UtcNow;
+            Process[] listProcessec = Process.GetProcesses();
 
-            return  processor;
+            double cpuUsageTotal = 1;
+            foreach ( Process process in listProcessec)
+            {
+                var startTime = DateTime.UtcNow;
+                var startCpuUsage = process.TotalProcessorTime;
+                await Task.Delay(500);
+                var endTime = DateTime.UtcNow;
+                var endCpuUsage = process.TotalProcessorTime;
+                var cpuUsedMs = (endCpuUsage - startCpuUsage).TotalMilliseconds;
+                var totalMsPassed = (endTime - startTime).TotalMilliseconds;
+                cpuUsageTotal =+ cpuUsedMs / (Environment.ProcessorCount * totalMsPassed);
+                Console.WriteLine($"{cpuUsageTotal}");
+            }
+
+            processor = new WorkLodaProcessor
+            {
+                WorkLoda =cpuUsageTotal,
+                DateCheck = DateTime.Now,
+            };
+
+            Console.WriteLine($"{processor.WorkLoda} {processor.DateCheck}");
+            //using (db = new ServerAnalyticsContext())
+            //{
+            //    db.WorkLodaProcessors.Add(processor);
+            //    db.SaveChanges();
+            //}
         }
     }
 }

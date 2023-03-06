@@ -20,17 +20,34 @@ namespace ServerAnalytics.Services
             }
             return GetWindowsMetrics();
         }
-
+        public void UpdateMemoryMetrics()
+        {
+            if (runtimeInformation.IsUnix())
+            {
+                UpdateUnixMetrics();
+            }
+            UpdateWindowsMetrics();
+        }
         private List<MemoryMetric> GetWindowsMetrics()
+        {
+            List<MemoryMetric> memoryMetrics = new List<MemoryMetric>();
+
+            using (db = new ServerAnalyticsContext())
+            {
+                memoryMetrics = db.MemoryMetrics.ToList();
+            }
+            return memoryMetrics;
+        }
+        private void UpdateWindowsMetrics()
         {
             var output = "";
 
             var info = new ProcessStartInfo();
             info.FileName = "wmic";
             info.Arguments = "OS get FreePhysicalMemory,TotalVisibleMemorySize /Value";
-            info.RedirectStandardOutput= true;
+            info.RedirectStandardOutput = true;
 
-            using(var process = Process.Start(info))
+            using (var process = Process.Start(info))
             {
                 output = process.StandardOutput.ReadToEnd();
             }
@@ -44,21 +61,25 @@ namespace ServerAnalytics.Services
             metrics.Free = Math.Round(double.Parse(freeMemoryParts[1]) / 1024, 0);
             metrics.Used = (double)(metrics.Total - metrics.Free);
             metrics.DateCheck = DateTime.UtcNow;
-            List<MemoryMetric> memoryMetrics = new List<MemoryMetric>();
 
-            using(db = new ServerAnalyticsContext())
+            using (db = new ServerAnalyticsContext())
             {
                 db.MemoryMetrics.Add(metrics);
                 db.SaveChanges();
             }
+        }
+
+        private List<MemoryMetric> GetUnixMetrics()
+        {
+            List<MemoryMetric> memoryMetrics = new List<MemoryMetric>();
+
             using (db = new ServerAnalyticsContext())
             {
                 memoryMetrics = db.MemoryMetrics.ToList();
             }
             return memoryMetrics;
         }
-
-        private List<MemoryMetric> GetUnixMetrics()
+        private void UpdateUnixMetrics()
         {
             var output = "";
 
@@ -82,18 +103,11 @@ namespace ServerAnalytics.Services
             metrics.Free = double.Parse(memory[3]);
             metrics.DateCheck = DateTime.UtcNow;
 
-            List<MemoryMetric> memoryMetrics = new List<MemoryMetric>();
-
             using (db = new ServerAnalyticsContext())
             {
                 db.MemoryMetrics.Add(metrics);
                 db.SaveChanges();
             }
-            using (db = new ServerAnalyticsContext())
-            {
-                memoryMetrics = db.MemoryMetrics.ToList();
-            }
-            return memoryMetrics;
         }
     }
 }

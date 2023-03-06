@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ServerAnalytics.Models
 {
@@ -18,6 +19,11 @@ namespace ServerAnalytics.Models
         public int Memory { get; set; }
         public DateTime DateCheck { get; set; }
 
+        public int IdServer { get; set; }
+
         public List<RunningProcess> Children { get; set; } = new();
+
+        [ForeignKey("IdServer")]
+        public Server Server { get; set; }
     }
 }

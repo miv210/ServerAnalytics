@@ -4,6 +4,7 @@ namespace ServerAnalytics.Services.Interface
 {
     public interface IProcessorMetricsService
     {
-        Task<WorkLodaProcessor> GetCpuUsageForProcessAsync();
+        List<WorkLodaProcessor> GetCpuMetrics();
+        Task UpdateCpuMetrics();
     }
 }

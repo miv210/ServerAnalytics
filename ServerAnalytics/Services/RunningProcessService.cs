@@ -6,25 +6,42 @@ using System.Reflection;
 using System.Collections.Immutable;
 using System;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace ServerAnalytics.Services
 {
     public class RunningProcessService : IRunningProcessesService
     {
         ServerAnalyticsContext db;
-        public void UpdateRunningProcesses (string nameMachine)
+        public void UpdateRunningProcesses ()
         {
             
             DateTime date = DateTime.UtcNow;
-            Process[] processesList = Process.GetProcesses(nameMachine);
-            
+            Process[] processesList = Process.GetProcesses();
+
+
+
+            var ip = Dns.GetHostByName(Dns.GetHostName()).AddressList[2].ToString();
+
+            Server server;
+            using(db = new ServerAnalyticsContext())
+            {
+                server = db.Servers.FirstOrDefault(p => p.Ip == ip);
+                if (server == null)
+                {
+                    Console.WriteLine("Сервера с таки адрессом не найденно");
+                }
+            }
+          
             var runningProcesses = processesList.Select(p=> new RunningProcess
             {
                 Name = p.ProcessName,
                 PID = p.Id,
                 SessionNumber = p.SessionId,
                 Memory = p.WorkingSet / 1024,
-                DateCheck = date
+                DateCheck = date,
+                IdServer= server.Id,
+                
             }).ToList();
 
             using (db = new ServerAnalyticsContext())
@@ -38,9 +55,13 @@ namespace ServerAnalytics.Services
         {
             List<RunningProcess> runningProcesses = new List<RunningProcess>();
 
+
+            List<Server> serverList;
+
             using(db = new ServerAnalyticsContext())
             {
                 runningProcesses = db.RunningProcesses.ToList();
+                serverList = db.Servers.ToList();
             }
 
             var withChildren = runningProcesses.GroupBy(p => new { p.Name, p.DateCheck} ).Select(p => new RunningProcess
@@ -51,6 +72,21 @@ namespace ServerAnalytics.Services
                 Children = p.ToList(),
             }).ToList();
 
+            var servers = serverList.GroupBy(p => new { p.Runnings, p.Ip, p.Name }).Select(p => new Server
+            {
+                Name = p.Key.Name,
+                Ip = p.Key.Ip,
+                Runnings= withChildren
+            });
+
+            foreach (var dsa in servers)
+            {
+                Console.WriteLine(dsa.Name + "\n");
+                foreach (var lk in dsa.Runnings)
+                {
+                    Console.WriteLine($"{lk.Name}");
+                }
+            }
             return withChildren;
         }
 

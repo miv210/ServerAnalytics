@@ -35,7 +35,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 
 
 builder.Services.AddScoped<IMemoryMetricsService, MemoryMetricsService>();
@@ -43,6 +43,7 @@ builder.Services.AddScoped<IRuntimeInformation, RuntimeInformationService>();
 builder.Services.AddScoped<IRunningProcessesService, RunningProcessService>();
 builder.Services.AddScoped<IProcessorMetricsService, ProcessorMetricsService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IServerService, ServerService>();
 
 builder.Services.AddCors();
 
@@ -51,7 +52,7 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
-app.UseCors(builder => builder.AllowAnyOrigin());
+app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
 app.UseAuthorization();
 

@@ -27,5 +27,7 @@ namespace ServerAnalytics.Models
 
         public DbSet<WorkLodaProcessor> WorkLodaProcessors { get; set;} = null!;
         public DbSet<RunningProcess> RunningProcesses { get; set; } = null!;
+
+        public DbSet<Server> Servers { get; set; } = null!; 
     }
 }
