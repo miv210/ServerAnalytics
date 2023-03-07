@@ -55,3 +55,6 @@ C:\VsProjects\ServerAnalytics\ServerAnalytics\bin\Debug\net7.0\runtimes\win\lib\
 C:\VsProjects\ServerAnalytics\ServerAnalytics\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Drawing.Common.dll
 C:\VsProjects\ServerAnalytics\ServerAnalytics\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Security.Cryptography.ProtectedData.dll
 C:\VsProjects\ServerAnalytics\ServerAnalytics\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Windows.Extensions.dll
+C:\VsProjects\ServerAnalytics\ServerAnalytics\bin\Debug\net7.0\Microsoft.AspNetCore.JsonPatch.dll
+C:\VsProjects\ServerAnalytics\ServerAnalytics\bin\Debug\net7.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+C:\VsProjects\ServerAnalytics\ServerAnalytics\bin\Debug\net7.0\Newtonsoft.Json.Bson.dll

@@ -20,14 +20,6 @@ namespace ServerAnalytics.Services
             }
             return GetWindowsMetrics();
         }
-        public void UpdateMemoryMetrics()
-        {
-            if (runtimeInformation.IsUnix())
-            {
-                UpdateUnixMetrics();
-            }
-            UpdateWindowsMetrics();
-        }
         private List<MemoryMetric> GetWindowsMetrics()
         {
             List<MemoryMetric> memoryMetrics = new List<MemoryMetric>();
@@ -38,37 +30,6 @@ namespace ServerAnalytics.Services
             }
             return memoryMetrics;
         }
-        private void UpdateWindowsMetrics()
-        {
-            var output = "";
-
-            var info = new ProcessStartInfo();
-            info.FileName = "wmic";
-            info.Arguments = "OS get FreePhysicalMemory,TotalVisibleMemorySize /Value";
-            info.RedirectStandardOutput = true;
-
-            using (var process = Process.Start(info))
-            {
-                output = process.StandardOutput.ReadToEnd();
-            }
-
-            var lines = output.Trim().Split('\n');
-            var freeMemoryParts = lines[0].Split("=", StringSplitOptions.RemoveEmptyEntries);
-            var totalMemoryParts = lines[1].Split("=", StringSplitOptions.RemoveEmptyEntries);
-
-            var metrics = new MemoryMetric();
-            metrics.Total = Math.Round(double.Parse(totalMemoryParts[1]) / 1024, 0);
-            metrics.Free = Math.Round(double.Parse(freeMemoryParts[1]) / 1024, 0);
-            metrics.Used = (double)(metrics.Total - metrics.Free);
-            metrics.DateCheck = DateTime.UtcNow;
-
-            using (db = new ServerAnalyticsContext())
-            {
-                db.MemoryMetrics.Add(metrics);
-                db.SaveChanges();
-            }
-        }
-
         private List<MemoryMetric> GetUnixMetrics()
         {
             List<MemoryMetric> memoryMetrics = new List<MemoryMetric>();
@@ -79,33 +40,31 @@ namespace ServerAnalytics.Services
             }
             return memoryMetrics;
         }
-        private void UpdateUnixMetrics()
+        public void UpdateMemoryMetrics(MemoryMetric memoryMetric)
         {
-            var output = "";
-
-            var info = new ProcessStartInfo("free -m");
-            info.FileName = "/bin/bash";
-            info.Arguments = "-c \"free -m\"";
-            info.RedirectStandardOutput = true;
-
-            using (var process = Process.Start(info))
+            if (runtimeInformation.IsUnix())
             {
-                output = process.StandardOutput.ReadToEnd();
-                Console.WriteLine(output);
+                UpdateUnixMetrics(memoryMetric);
             }
-
-            var lines = output.Split("\n");
-            var memory = lines[1].Split(" ", StringSplitOptions.RemoveEmptyEntries);
-
-            var metrics = new MemoryMetric();
-            metrics.Total = double.Parse(memory[1]);
-            metrics.Used = double.Parse(memory[2]);
-            metrics.Free = double.Parse(memory[3]);
-            metrics.DateCheck = DateTime.UtcNow;
+            UpdateWindowsMetrics(memoryMetric);
+        }
+        
+        private void UpdateWindowsMetrics(MemoryMetric memoryMetric)
+        {
 
             using (db = new ServerAnalyticsContext())
             {
-                db.MemoryMetrics.Add(metrics);
+                db.MemoryMetrics.Add(memoryMetric);
+                db.SaveChanges();
+            }
+        }
+
+        
+        private void UpdateUnixMetrics(MemoryMetric memoryMetric)
+        {
+            using (db = new ServerAnalyticsContext())
+            {
+                db.MemoryMetrics.Add(memoryMetric);
                 db.SaveChanges();
             }
         }

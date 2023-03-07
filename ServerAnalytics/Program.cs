@@ -8,6 +8,7 @@ using ServerAnalytics.Services.AuthService;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Security.Cryptography.Xml;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,7 +36,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 // Add services to the container.
-builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
+builder.Services.AddControllers().AddNewtonsoftJson (options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
 
 builder.Services.AddScoped<IMemoryMetricsService, MemoryMetricsService>();

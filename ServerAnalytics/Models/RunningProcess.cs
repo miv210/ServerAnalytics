@@ -20,10 +20,10 @@ namespace ServerAnalytics.Models
         public DateTime DateCheck { get; set; }
 
         public int IdServer { get; set; }
-
+        [NotMapped]
         public List<RunningProcess> Children { get; set; } = new();
 
         [ForeignKey("IdServer")]
-        public Server Server { get; set; }
+        public Server? Server { get; set; }
     }
 }

@@ -38,11 +38,24 @@ namespace ServerAnalytics.Controllers
             return jwt;
         }
 
-        [HttpGet("updateMetrics")]
-        public async Task<ActionResult> UpdateMetrics()
+        [HttpPost("update/runnong_processes")]
+        public async Task<ActionResult> UpdateRunningMetrics([FromBody]List<RunningProcess> runningProcesses)
         {
-            runningProcessesService.UpdateRunningProcesses();
-            //await processorMetricsService.UpdateCpuMetrics(serv);
+            runningProcessesService.UpdateRunningProcesses(runningProcesses);
+            return new OkResult();
+        }
+
+        [HttpPost("update/memory")]
+        public async Task<ActionResult> UpdateMemoryMetrics([FromBody]MemoryMetric memoryMetric)
+        {
+            try
+            {
+                memoryMetricsService.UpdateMemoryMetrics(memoryMetric);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             return new OkResult();
         }
 
