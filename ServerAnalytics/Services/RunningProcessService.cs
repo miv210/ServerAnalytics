@@ -37,28 +37,16 @@ namespace ServerAnalytics.Services
 
             var withChildren = runningProcesses.GroupBy(p => new { p.Name, p.DateCheck, p.IdServer} ).Select(p => new RunningProcess
             {
+                
+
                 Name = p.Key.Name,
                 Memory = p.Sum(d => d.Memory / 1024),
                 DateCheck = p.Key.DateCheck,
                 IdServer = p.Key.IdServer,
+                Date = p.Key.DateCheck.ToString("d.M.yyyy HH:mm"),
                 Children = p.ToList(),
             }).ToList();
 
-            //var servers = serverList.GroupBy(p => new { p.Runnings, p.Ip, p.Name }).Select(p => new Server
-            //{
-            //    Name = p.Key.Name,
-            //    Ip = p.Key.Ip,
-            //    Runnings= withChildren
-            //});
-
-            //foreach (var dsa in servers)
-            //{
-            //    Console.WriteLine(dsa.Name + "\n");
-            //    foreach (var lk in dsa.Runnings)
-            //    {
-            //        Console.WriteLine($"{lk.Name}");
-            //    }
-            //}
             return withChildren;
         }
     }

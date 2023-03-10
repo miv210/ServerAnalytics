@@ -18,7 +18,8 @@ namespace ServerAnalytics.Models
         
         public int Memory { get; set; }
         public DateTime DateCheck { get; set; }
-
+        [NotMapped]
+        public string Date { get; set; }
         public int IdServer { get; set; }
         [NotMapped]
         public List<RunningProcess> Children { get; set; } = new();

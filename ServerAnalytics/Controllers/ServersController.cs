@@ -38,7 +38,7 @@ namespace ServerAnalytics.Controllers
             serverService.Add(server);
             return new OkResult();
         }
-        [HttpDelete("")]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
             serverService.Delete(id);

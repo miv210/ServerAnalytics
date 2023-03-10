@@ -44,7 +44,7 @@ namespace ServerAnalytics.Services
             {
                 var server = db.Servers.FirstOrDefault(s => s.Id == id);
 
-                db.Remove(server);
+                db.Servers.Remove(server);
                 db.SaveChanges();
             }
         }
